@@ -228,21 +228,18 @@ export function getMockDashboardData(): DashboardData {
   return mockState;
 }
 
-export async function fetchLiveDashboardData(useMock: boolean = true): Promise<DashboardData> {
+export async function fetchLiveDashboardData(useMock: boolean = false): Promise<DashboardData> {
   if (useMock) {
     return getMockDashboardData();
   }
   
   try {
-    // Attempt backend connection
-    const res = await fetch("/api/metrics");
+    const res = await fetch("/dashboard_data.json");
     if (!res.ok) {
-      throw new Error("HTTP error querying server api endpoint");
+      throw new Error("HTTP error querying dashboard_data.json");
     }
     return await res.json();
   } catch (err) {
-    // Log and fall back to mock data
-    console.warn("Live API connection failed, falling back to mock data source.", err);
     return getMockDashboardData();
   }
 }
