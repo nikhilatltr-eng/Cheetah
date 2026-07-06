@@ -219,15 +219,12 @@ def run_pipeline():
     # 2. Pull maximum history (aim for 2024-01-01 to 2026-06-30)
     symbol = "XAUUSD"
     timeframe = mt5.TIMEFRAME_M1
-    utc_from = datetime.datetime(2024, 1, 1, tzinfo=datetime.timezone.utc)
-    utc_to = datetime.datetime(2026, 6, 30, 23, 59, 59, tzinfo=datetime.timezone.utc)
-
-    logger.info("Pulling data from MT5...")
-    rates = mt5.copy_rates_range(symbol, timeframe, utc_from, utc_to)
-    if rates is None or len(rates) == 0:
-        logger.warning("No data found for 2024. Falling back to 2026-04-01 to 2026-06-30...")
-        utc_from = datetime.datetime(2026, 4, 1, tzinfo=datetime.timezone.utc)
-        rates = mt5.copy_rates_range(symbol, timeframe, utc_from, utc_to)
+    # Pull maximum history (aim for up to 1,000,000 bars ending at 2026-06-30)
+    date_to = datetime.datetime(2026, 6, 30, 23, 59, 59)
+    max_count = 1000000
+    
+    logger.info("Pulling data from MT5 using copy_rates_from...")
+    rates = mt5.copy_rates_from(symbol, timeframe, date_to, max_count)
 
     if rates is None or len(rates) == 0:
         logger.error(f"Failed to pull rates from MT5: {mt5.last_error()}")
