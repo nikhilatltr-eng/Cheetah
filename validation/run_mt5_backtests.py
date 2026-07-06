@@ -353,7 +353,7 @@ This report audits the historical M1 data of XAUUSD retrieved directly from the 
 - **Status**: {"PASS" if missing_count < 10 and len(abnormal_bars) == 0 else "PASS WITH WARNINGS"}
 - **Notes**: Historical gaps are standard weekend closures. No weekday feed issues detected.
 """
-    with open("reports/MT5_DATA_QUALITY_REPORT.md", "w") as f:
+    with open("reports/MT5_DATA_QUALITY_REPORT.md", "w", encoding="utf-8") as f:
         f.write(dq_content)
         
     # ==========================================
@@ -389,7 +389,7 @@ Cross-check analysis between Vantage Markets MT5 prices and Dukascopy reference 
 ## ⚖️ Observations
 The broker feeds match reference data with high precision. Small micro-price deviations occur during high-volatility news releases, which is normal due to different liquidity pool providers.
 """
-    with open("reports/MT5_VS_DUKASCOPY_DATA_COMPARISON_REPORT.md", "w") as f:
+    with open("reports/MT5_VS_DUKASCOPY_DATA_COMPARISON_REPORT.md", "w", encoding="utf-8") as f:
         f.write(comp_content)
         
     # ==========================================
@@ -441,7 +441,7 @@ Historical backtesting results on Vantage MT5 broker data (0.28 spread, 0.05 sli
 - **One Active Position Limit**: Verified.
 - **No overlapping concurrent entries**: Verified.
 """
-    with open("reports/MT5_BACKTEST_REPORT.md", "w") as f:
+    with open("reports/MT5_BACKTEST_REPORT.md", "w", encoding="utf-8") as f:
         f.write(bt_content)
         
     # ==========================================
@@ -479,7 +479,7 @@ Evaluates the performance sensitivity of the strategy under varying spreads and 
 ## 📊 Stress Performance Matrix (Config: Thresh >= 60%, ATR stop)
 {format_df_to_markdown(df_stress)}
 """
-    with open("reports/MT5_COST_STRESS_REPORT.md", "w") as f:
+    with open("reports/MT5_COST_STRESS_REPORT.md", "w", encoding="utf-8") as f:
         f.write(cost_content)
         
     # ==========================================
@@ -514,7 +514,7 @@ Audits the strategy against deployment acceptance criteria to authorize live can
 - **VERDICT**: **{"PASS" if passed else "FAIL"}**
 - **Rationale**: The strategy meets all risk-adjusted return requirements on raw broker feeds.
 """
-    with open("reports/MT5_FORWARD_READINESS_REPORT.md", "w") as f:
+    with open("reports/MT5_FORWARD_READINESS_REPORT.md", "w", encoding="utf-8") as f:
         f.write(forward_content)
         
     logger.info("All validation reports compiled successfully.")
