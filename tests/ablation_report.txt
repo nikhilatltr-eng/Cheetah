@@ -1,0 +1,21 @@
+======================================================
+ABLATION REPORT: LIGHTGBM VS PYTORCH LSTM ENTRY MODEL
+Generated: 2026-07-06T01:01:44.969267
+======================================================
+Dataset Parameters:
+  - Total Samples: 150
+  - Train Samples: 100
+  - Test Samples: 50
+  - Number of Features: 8
+
+LightGBM Entry Model (Champion):
+  - Fit Time: 111.77 ms
+  - Out-of-Sample Accuracy: 74.00%
+
+PyTorch LSTM Sequence Model (Challenger):
+  - Fit Time: 73.19 ms
+  - Out-of-Sample Accuracy (Inference-Aligned): 45.65%
+
+Conclusion:
+  REJECTED (LightGBM baseline remains champion)
+======================================================

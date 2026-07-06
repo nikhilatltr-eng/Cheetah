@@ -1,0 +1,14 @@
+{
+    "model_name": "entry_lgb",
+    "version": 1,
+    "save_time": "2026-07-05T11:21:55.508298+00:00",
+    "data_range": {
+        "start": "2026-07-03T09:18:00+00:00",
+        "end": "2026-07-05T12:01:00+00:00"
+    },
+    "data_hash": "981f14f5e8a8a00b8aec74922d25166c",
+    "git_commit": "unknown",
+    "metrics": {
+        "n_samples": 3044
+    }
+}

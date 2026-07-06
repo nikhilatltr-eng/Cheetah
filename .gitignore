@@ -1,0 +1,15 @@
+# Cache and build files
+__pycache__/
+*.pyc
+.pytest_cache/
+.next/
+node_modules/
+
+# Local databases and states
+*.db
+*.log
+cheetah.log
+
+# Raw & Processed data feeds
+data/raw/
+data/processed/

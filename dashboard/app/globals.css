@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --bg-graphite: #14171C;
+  --bg-panel: #1C2128;
+  --text-primary: #E8E6E1;
+  --text-muted: #8B8F96;
+  --accent-brass: #C9A66B;
+  --signal-gain: #7C9A78;
+  --signal-loss: #B5544A;
+  --hairline: #2A2F38;
+}
+
+@theme {
+  /* Fonts mapping */
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-fraunces);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* Colors mapping */
+  --color-bg-graphite: var(--bg-graphite);
+  --color-bg-panel: var(--bg-panel);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-accent-brass: var(--accent-brass);
+  --color-signal-gain: var(--signal-gain);
+  --color-signal-loss: var(--signal-loss);
+  --color-hairline: var(--hairline);
+
+  --color-graphite: var(--bg-graphite);
+  --color-panel: var(--bg-panel);
+  --color-primary: var(--text-primary);
+  --color-muted: var(--text-muted);
+  --color-brass: var(--accent-brass);
+  --color-gain: var(--signal-gain);
+  --color-loss: var(--signal-loss);
+}
+
+body {
+  background-color: var(--bg-graphite);
+  color: var(--text-primary);
+}

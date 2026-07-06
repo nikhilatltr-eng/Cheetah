@@ -1,0 +1,44 @@
+mt5:
+  login: 12345678                  # Replace with real MT5 Login ID
+  password: "YourMT5Password"      # Replace with real MT5 Password
+  server: "MetaQuotes-Demo"        # Replace with broker's server name
+symbol: "XAUUSD"                   # Override if your broker uses XAUUSD.m, GOLD#, XAUUSDm, etc.
+timeframes:
+  - "M1"
+  - "M5"
+  - "M15"
+  - "H1"
+  - "H4"
+  - "D1"
+telegram:
+  bot_token: "YOUR_TELEGRAM_BOT_TOKEN"
+  chat_id: "YOUR_TELEGRAM_CHAT_ID"
+polling_interval_seconds: 5
+
+labeling:
+  pt_mult: 2.0
+  sl_mult: 2.0
+  max_holding_bars: 20
+
+validation:
+  n_folds: 5
+  embargo_bars: 10
+
+use_deep_model: false
+
+risk_pct: 0.01
+use_kelly: false
+confidence_threshold: 0.6
+news_blackout_minutes: 15
+economic_calendar_api_key: ""
+max_positions_limit: 3
+max_daily_loss_pct: 0.02
+
+# Phase 8 Dukascopy Data Pipeline Configurations
+DATA_PROVIDER: "DUKASCOPY"
+RAW_DATA_PATH: "data/raw/dukascopy"
+PROCESSED_DATA_PATH: "data/processed"
+START_DATE: "2026-06-01"
+END_DATE: "2026-06-15"
+
+
