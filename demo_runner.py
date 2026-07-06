@@ -44,6 +44,9 @@ class DemoRunner:
         with open(self.config_path, "r") as f:
             self.config = yaml.safe_load(f)
             
+        # Determine paper trading mode (default to true)
+        self.paper_trading = self.config.get("paper_trading", paper_trading)
+        
         self.symbol = self.config.get("symbol", "XAUUSD")
         self.timeframe = "M1"
         
@@ -261,6 +264,15 @@ class DemoRunner:
             logger.error(f"DemoRunner runtime crash: {e}")
 
 if __name__ == "__main__":
+    config_path = "config.yaml"
     paper_mode = True
-    runner = DemoRunner(paper_trading=paper_mode)
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, "r") as f:
+                cfg = yaml.safe_load(f)
+                paper_mode = cfg.get("paper_trading", True)
+        except Exception:
+            pass
+            
+    runner = DemoRunner(config_path=config_path, paper_trading=paper_mode)
     asyncio.run(runner.run())

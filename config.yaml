@@ -3,6 +3,7 @@ mt5:
   password: "YourMT5Password"      # Replace with real MT5 Password
   server: "MetaQuotes-Demo"        # Replace with broker's server name
 symbol: "XAUUSD"                   # Override if your broker uses XAUUSD.m, GOLD#, XAUUSDm, etc.
+paper_trading: true                 # Set to false to execute trades directly on MT5 account
 timeframes:
   - "M1"
   - "M5"
