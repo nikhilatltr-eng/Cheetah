@@ -216,27 +216,44 @@ def run_pipeline():
         logger.error(f"MT5 login failed: {mt5.last_error()}")
         sys.exit(1)
 
-    # 2. Pull maximum history (aim for 2024-01-01 to 2026-06-30)
+    # 2. Pull maximum history using chunked copy_rates_from
     symbol = "XAUUSD"
     timeframe = mt5.TIMEFRAME_M1
-    # Pull maximum history (aim for up to 1,000,000 bars ending at 2026-06-30)
     date_to = datetime.datetime(2026, 6, 30, 23, 59, 59)
-    max_count = 1000000
     
-    logger.info("Pulling data from MT5 using copy_rates_from...")
-    rates = mt5.copy_rates_from(symbol, timeframe, date_to, max_count)
-
-    if rates is None or len(rates) == 0:
-        logger.error(f"Failed to pull rates from MT5: {mt5.last_error()}")
+    logger.info("Pulling data from MT5 in chunks of 50,000 bars...")
+    all_chunks = []
+    current_date = date_to
+    
+    for i in range(20):
+        logger.info(f"Querying chunk {i+1} ending at {current_date.isoformat()}...")
+        chunk = mt5.copy_rates_from(symbol, timeframe, current_date, 50000)
+        if chunk is None or len(chunk) == 0:
+            logger.info(f"Finished fetching chunks: chunk {i+1} is empty/None.")
+            break
+            
+        all_chunks.append(pd.DataFrame(chunk))
+        earliest_ts = chunk[0][0] # time field
+        current_date = datetime.datetime.fromtimestamp(earliest_ts) - datetime.timedelta(seconds=1)
+        
+        if current_date < datetime.datetime(2024, 1, 1):
+            logger.info("Reached target start date 2024-01-01.")
+            break
+            
+    if len(all_chunks) == 0:
+        logger.error("Failed to retrieve any data chunks from MT5.")
         sys.exit(1)
-
-    logger.info(f"Retrieved {len(rates)} bars.")
-    
-    # Save Raw Data
-    df_raw = pd.DataFrame(rates)
+        
+    df_raw = pd.concat(all_chunks, ignore_index=True)
     df_raw['time'] = pd.to_datetime(df_raw['time'], unit='s', utc=True)
     df_raw.rename(columns={'time': 'timestamp'}, inplace=True)
+    df_raw.sort_values('timestamp', inplace=True)
+    df_raw.drop_duplicates(subset=['timestamp'], inplace=True)
+    df_raw.reset_index(drop=True, inplace=True)
+
+    logger.info(f"Combined and sorted {len(df_raw)} unique bars.")
     
+    # Save Raw Data
     raw_dir = "data/raw/mt5/XAUUSD/M1"
     os.makedirs(raw_dir, exist_ok=True)
     raw_file = os.path.join(raw_dir, "raw_mt5_m1_data.parquet")
