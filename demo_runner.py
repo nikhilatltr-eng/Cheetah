@@ -355,7 +355,7 @@ class DemoRunner:
                 }
             ],
             "spread": {
-                "current": float(np.round(ask - bid, 2)),
+                "current": float(round(ask - bid, 2)),
                 "mean": 0.30,
                 "p95": 0.45,
                 "isElevated": (ask - bid) > 0.60
