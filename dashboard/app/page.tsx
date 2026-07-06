@@ -20,7 +20,7 @@ export default function Dashboard() {
     let active = true;
 
     async function update() {
-      const freshData = await fetchLiveDashboardData(true);
+      const freshData = await fetchLiveDashboardData();
       if (active) {
         setData({ ...freshData });
       }
