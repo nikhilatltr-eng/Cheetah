@@ -247,7 +247,7 @@ def run_pipeline():
         
     df_raw = pd.concat(all_chunks, ignore_index=True)
     df_raw['time'] = pd.to_datetime(df_raw['time'], unit='s', utc=True)
-    df_raw.rename(columns={'time': 'timestamp'}, inplace=True)
+    df_raw.rename(columns={'time': 'timestamp', 'tick_volume': 'volume'}, inplace=True)
     df_raw.sort_values('timestamp', inplace=True)
     df_raw.drop_duplicates(subset=['timestamp'], inplace=True)
     df_raw.reset_index(drop=True, inplace=True)
