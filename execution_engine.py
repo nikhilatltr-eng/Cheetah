@@ -356,3 +356,42 @@ class ExecutionEngine:
                         result = mt5.order_send(request)
                         if result.retcode == mt5.TRADE_RETCODE_DONE:
                             logger.info(f"ExecutionEngine: Live Trailing Stop modified for Sell ticket {pos.ticket} to {new_sl}")
+
+    def get_active_positions(self) -> list:
+        """Returns active positions as standard dictionaries for unified risk checks."""
+        if self.mock:
+            return self.mock_positions
+        else:
+            positions = []
+            if mt5 is not None:
+                try:
+                    mt5_positions = mt5.positions_get(symbol=self.symbol)
+                    if mt5_positions:
+                        for p in mt5_positions:
+                            positions.append({
+                                "ticket": p.ticket,
+                                "type": "BUY" if p.type == 0 else "SELL",
+                                "volume": float(p.volume),
+                                "open_price": float(p.price_open),
+                                "sl": float(p.sl),
+                                "tp": float(p.tp),
+                                "magic": p.magic
+                            })
+                except Exception as e:
+                    logger.error(f"Error fetching active MT5 positions for risk: {e}")
+            return positions
+
+    @property
+    def current_equity(self) -> float:
+        """Returns the current account equity from MT5 or mock model."""
+        if self.mock:
+            return self.equity
+        else:
+            if mt5 is not None:
+                try:
+                    acc_info = mt5.account_info()
+                    if acc_info:
+                        return float(acc_info.equity)
+                except Exception:
+                    pass
+            return 5000.0

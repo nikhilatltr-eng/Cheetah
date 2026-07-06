@@ -191,9 +191,9 @@ class DemoRunner:
                     news_blocked = self.news_filter.is_blackout_active(current_time)
                     
                     # 4. Perform Risk check
-                    active_positions = self.execution.mock_positions
+                    active_positions = self.execution.get_active_positions()
                     history = self.execution.trade_history
-                    equity = self.execution.equity
+                    equity = self.execution.current_equity
                     
                     allowed, risk_reason = self.risk_manager.evaluate_risk(
                         current_equity=equity,
