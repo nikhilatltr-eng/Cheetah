@@ -51,15 +51,10 @@ class DataGapDetector:
         # Calculate diffs between consecutive bars
         max_internal_gap = 0.0
         if len(df_bars) > 1:
-            raw_ts = df_bars["timestamp"].values
-            if isinstance(raw_ts[0], str):
-                timestamps = pd.to_datetime(df_bars["timestamp"])
-                diffs = timestamps.diff().dropna().dt.total_seconds()
+            timestamps = pd.to_datetime(df_bars["timestamp"])
+            diffs = timestamps.diff().dropna().dt.total_seconds()
+            if not diffs.empty:
                 max_internal_gap = float(diffs.max())
-            else:
-                # Numerical timestamps (epoch seconds)
-                diffs = np.diff(raw_ts)
-                max_internal_gap = float(np.max(diffs))
             
         gap_detected = False
         reason = ""
