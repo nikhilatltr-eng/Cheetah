@@ -52,9 +52,18 @@ class DataGapDetector:
         max_internal_gap = 0.0
         if len(df_bars) > 1:
             timestamps = pd.to_datetime(df_bars["timestamp"])
-            diffs = timestamps.diff().dropna().dt.total_seconds()
-            if not diffs.empty:
-                max_internal_gap = float(diffs.max())
+            for i in range(len(timestamps) - 1):
+                t1 = timestamps.iloc[i]
+                t2 = timestamps.iloc[i+1]
+                gap_seconds = (t2 - t1).total_seconds()
+                if gap_seconds > (self.expected_interval * 2.5):
+                    try:
+                        b_days = len(pd.bdate_range(start=t1, end=t2))
+                        if b_days <= 2 and (t1.weekday() >= 4 or t2.weekday() <= 0):
+                            continue # Ignore weekend close gap
+                    except Exception:
+                        pass
+                    max_internal_gap = max(max_internal_gap, gap_seconds)
             
         gap_detected = False
         reason = ""
