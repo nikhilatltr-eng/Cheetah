@@ -148,11 +148,20 @@ def run_pipeline():
         logger.error(f"Processed data file {proc_file} not found.")
         sys.exit(1)
         
-    df = pd.read_parquet(proc_file)
-    df["timestamp"] = pd.to_datetime(df["timestamp"])
+    from features import compute_all_features
+    df_raw = pd.read_parquet(proc_file)
+    df_raw["timestamp"] = pd.to_datetime(df_raw["timestamp"])
     
-    # Filter to out-of-sample window: 2026-04-01 to 2026-06-30
-    df_oos = df[(df["timestamp"] >= "2026-04-01") & (df["timestamp"] <= "2026-06-30 23:59:59")].copy()
+    # Slice raw data with 1-week warmup buffer (from March 24th) to stabilize indicators
+    df_raw_oos = df_raw[(df_raw["timestamp"] >= "2026-03-24") & (df_raw["timestamp"] <= "2026-06-30 23:59:59")].copy()
+    df_raw_oos.sort_values("timestamp", inplace=True)
+    df_raw_oos.reset_index(drop=True, inplace=True)
+    
+    logger.info("Computing strategy features on Dukascopy raw data...")
+    df_features = compute_all_features(df_raw_oos)
+    
+    # Filter features to exact OOS window
+    df_oos = df_features[(df_features["timestamp"] >= "2026-04-01") & (df_features["timestamp"] <= "2026-06-30 23:59:59")].copy()
     df_oos.sort_values("timestamp", inplace=True)
     df_oos.reset_index(drop=True, inplace=True)
     
