@@ -159,10 +159,11 @@ def run_pipeline():
     # 2. Load Entry Model
     registry = ModelRegistry("models")
     model, metadata = registry.load_model("entry_lgb", version=1)
-    features = metadata["features"]
+    meta_cols = ["timestamp", "open", "high", "low", "close", "volume", "spread", "real_volume"]
+    features = [c for c in df_oos.columns if c not in meta_cols]
     
     # Evaluate model predictions
-    X = df_oos[features]
+    X = df_oos[features].copy()
     preds = model.predict(X)
     probs = model.predict_proba(X)
     
