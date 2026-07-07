@@ -57,6 +57,9 @@ class DataGapDetector:
                 t2 = timestamps.iloc[i+1]
                 gap_seconds = (t2 - t1).total_seconds()
                 if gap_seconds > (self.expected_interval * 2.5):
+                    # Ignore daily maintenance break (typically 1 hour / 3600s, max 2 hours / 7200s)
+                    if gap_seconds <= 7200:
+                        continue
                     try:
                         b_days = len(pd.bdate_range(start=t1, end=t2))
                         if b_days <= 2 and (t1.weekday() >= 4 or t2.weekday() <= 0):
