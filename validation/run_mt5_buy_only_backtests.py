@@ -158,9 +158,8 @@ def run_pipeline():
     
     # 2. Load Entry Model
     registry = ModelRegistry("models")
-    model_data = registry.load_model("entry_lgb", version=1)
-    model = model_data["model"]
-    features = model_data["features"]
+    model, metadata = registry.load_model("entry_lgb", version=1)
+    features = metadata["features"]
     
     # Evaluate model predictions
     X = df_oos[features]
